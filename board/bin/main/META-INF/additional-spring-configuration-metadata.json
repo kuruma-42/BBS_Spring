@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "spring.datasouce.hikari.connection-test-query",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasouce.hikari.connection-test-query'"
+  },
+  {
+    "name": "useUnicode",
+    "type": "java.lang.String",
+    "description": "A description for 'useUnicode'"
+  }
+]}
