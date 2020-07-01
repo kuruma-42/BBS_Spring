@@ -15,11 +15,11 @@ import board.board.service.BoardService;
 public class BoardController {
 	
 	@Autowired
-	private BoardService boardService; //로직 처리를 위해 서비스 빈 연결  
+	private BoardService boardService; 
 	
-	@RequestMapping("/board/openBoardList.do") 
+	@RequestMapping("/board/openBoardList.do")
 	public ModelAndView openBoardList() throws Exception{
-		ModelAndView mv = new ModelAndView("/board/boardList"); //모델을 보낼 곳을 지정
+		ModelAndView mv = new ModelAndView("/board/boardList");
 		
 		List<BoardDto> list = boardService.selectBoardList();
 		mv.addObject("list", list);
@@ -39,13 +39,13 @@ public class BoardController {
 	}
 	
 	@RequestMapping("/board/openBoardDetail.do")
-	public ModelAndView openBoardDetail(@RequestParam int boardIdx) throws Exception{ 
-	ModelAndView mv = new ModelAndView("/board/boardDetail");//모델을 보낼 곳을 지정
-	
-	BoardDto board = boardService.selectBoardDetail(boardIdx);
-	mv.addObject("board", board);
-	
-	return mv;
+	public ModelAndView openBoardDetail(@RequestParam int boardIdx) throws Exception{
+		ModelAndView mv = new ModelAndView("/board/boardDetail");
+		
+		BoardDto board = boardService.selectBoardDetail(boardIdx);
+		mv.addObject("board", board);
+		
+		return mv;
 	}
 	
 	@RequestMapping("/board/updateBoard.do")
@@ -59,5 +59,4 @@ public class BoardController {
 		boardService.deleteBoard(boardIdx);
 		return "redirect:/board/openBoardList.do";
 	}
-	
 }

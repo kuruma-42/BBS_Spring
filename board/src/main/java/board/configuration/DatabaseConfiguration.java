@@ -1,4 +1,3 @@
-  
 package board.configuration;
 
 import javax.sql.DataSource;
@@ -12,11 +11,15 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
+@EnableTransactionManagement
 @PropertySource("classpath:/application.properties")
 public class DatabaseConfiguration {
 	
@@ -30,9 +33,14 @@ public class DatabaseConfiguration {
 	}
 	
 	@Bean
+	@ConfigurationProperties(prefix="mybatis.configuration")
+	public org.apache.ibatis.session.Configuration mybatisConfig(){
+		return new org.apache.ibatis.session.Configuration(); 
+	}
+	
+	@Bean
 	public DataSource dataSource() throws Exception{
 		DataSource dataSource = new HikariDataSource(hikariConfig());
-		System.out.println(dataSource.toString());
 		return dataSource;
 	}
 	
@@ -42,6 +50,7 @@ public class DatabaseConfiguration {
 		sqlSessionFactoryBean.setDataSource(dataSource);
 		sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath:/mapper/**/sql-*.xml"));
 		sqlSessionFactoryBean.setConfiguration(mybatisConfig());
+		
 		return sqlSessionFactoryBean.getObject();
 	}
 	
@@ -51,8 +60,7 @@ public class DatabaseConfiguration {
 	}
 	
 	@Bean
-	@ConfigurationProperties(prefix="mybatis.configuration")
-	public org.apache.ibatis.session.Configuration mybatisConfig(){
-			return new org.apache.ibatis.session.Configuration();
+	public PlatformTransactionManager transactionManager() throws Exception {
+		return new DataSourceTransactionManager(dataSource());
 	}
 }
